@@ -1,0 +1,13 @@
+{
+  "name": "remotex-windows-shell",
+  "version": "0.1.0",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test agent/agent.test.js"
+  },
+  "devDependencies": {
+    "electron": "^33.2.1"
+  }
+}

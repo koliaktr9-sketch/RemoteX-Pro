@@ -1,0 +1,26 @@
+# Production security checklist
+
+- [x] Password hashes use bcrypt (cost 12; max 72 UTF-8 bytes to avoid silent truncation); registration cannot self-assign admin.
+- [x] Short-lived user JWTs have an explicit audience/type; device tokens use a separate audience/type.
+- [x] Authentication and pairing endpoints have rate limits; Helmet and CORS allow-list are enabled.
+- [x] TOTP MFA secrets are AES-256-GCM encrypted at rest.
+- [x] TOTP steps are atomically consumed to prevent replay on MFA confirmation, login and unattended enrollment.
+- [x] MFA setup requires password re-authentication.
+- [x] Admin role is re-checked from PostgreSQL on each admin API request.
+- [x] Device pairing secret is bcrypt-hashed, one-time, consumed under a row lock and exchanged for a short-lived device token plus a rotating refresh token.
+- [x] Device refresh tokens are bcrypt-hashed, rotated under a row lock and cleared on revocation.
+- [x] Device heartbeat requires a paired active device token; device revocation invalidates it immediately.
+- [x] User-owned device listing/revocation and admin RBAC are enforced server-side.
+- [x] Account, MFA, device-pairing and revocation lifecycle events are audited.
+- [x] Attended WebRTC relay is blocked until host approval; session leave is participant-authorized.
+- [ ] Move web bearer token from sessionStorage to Secure HttpOnly SameSite cookies with CSRF protection and refresh-token rotation.
+- [ ] Add email verification, recovery and robust account lockout / abuse controls.
+- [ ] Authenticate Socket.IO handshake and authorize every session/device message.
+- [ ] Persist and audit signaling session lifecycle in PostgreSQL; expose accurate live-session telemetry.
+- [ ] Implement signed Windows/Android agents and device-bound key storage/attestation.
+- [ ] Enforce unattended enrollment in signed native agents, persistent indicators and local/offline revocation.
+- [ ] Add TURN with short-lived credentials and TLS/WSS.
+- [ ] Add Android MediaProjection consent and persistent foreground notification.
+- [ ] Sign Windows binaries and updates; verify signatures before install.
+- [ ] Add file-transfer authorization, size limits, malware scanning and audit.
+- [ ] Pen-test auth, signaling, device enrollment, update channels and revocation.
